@@ -14,11 +14,28 @@ class Canvas(QLabel):
     def __init__(self):
         super().__init__()
 
-        canvas = QPixmap(600, 300)
-        canvas.setDevicePixelRatio(self.devicePixelRatio())
-        canvas.fill(Qt.GlobalColor.white)
-        self.setPixmap(canvas)
-        # self.setMouseTracking(True)
+        self.setScaledContents(True)
+
+
+        # Initialise the pixmap in resizeEvent
+        # resizeEvent is called when initialised so it will run
+        self.canvas = None
+
+        # For debugging purposes - shouldn't be visible
+        self.setStyleSheet("background-color: green;")
+
+    # I forgot the proper name but this is a feature of QLabel inherited I believe
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+
+         # Get the exact size of this widget
+        size = self.size()
+    
+        # Create a pixmap that's EXACTLY the widget size
+        self.canvas = QPixmap(size.width(), size.height())
+        self.canvas.setDevicePixelRatio(self.devicePixelRatio())
+        self.canvas.fill(Qt.GlobalColor.white)
+        self.setPixmap(self.canvas)
 
 
 class MainWindow(QMainWindow):
@@ -51,8 +68,11 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(central_widget)
 
-        self.adjustSize()
-        # self.setFixedSize(self.size())
+        # Set initial size
+        self.resize(800, 600)
+        
+        # Set minimum size so it can't be made too small
+        self.setMinimumSize(400, 300)
 
 def main(): 
     app = QApplication(sys.argv)
