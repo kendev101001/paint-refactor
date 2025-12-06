@@ -18,7 +18,7 @@ class Canvas(QLabel):
 
         # Make the canvas expand to fill available space
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.setMinimumSize(int(300 * dpr), int(200 * dpr))
+        self.setMinimumSize(int(600 * dpr), int(400 * dpr))
 
         # Initialize with a pixmap
         pixmap = QPixmap(int(600 * dpr), int(300 * dpr))
