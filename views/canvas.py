@@ -1,16 +1,16 @@
-import sys
-from PyQt6.QtWidgets import (
-    QApplication,
-    QMainWindow,
-    QWidget,
-    QHBoxLayout,
-    QLabel,
-    QSizePolicy
-)
-from PyQt6.QtGui import QPixmap, QPainter
-from PyQt6.QtCore import Qt
 
+from PyQt6.QtWidgets import (
+    QLabel,
+    QSizePolicy,
+)
+
+from PyQt6.QtGui import QPixmap, QPainter
+from PyQt6.QtCore import Qt, pyqtSignal
 class Canvas(QLabel):
+
+    # Signal - for when you have clicked on the canvas
+    clicked = pyqtSignal(int, int)
+
     def __init__(self):
         super().__init__()
 
@@ -26,14 +26,14 @@ class Canvas(QLabel):
         pixmap.fill(Qt.GlobalColor.white)
         self.setPixmap(pixmap)
 
-    def resizeEvent(self, event):
+    def resizeEvent(self, ev):
         """Called when window is resized (and on start up)"""
-        super().resizeEvent(event)
-        self._update_display(event)
+        super().resizeEvent(ev)
+        self._update_display(ev)
 
-    def _update_display(self, event):
+    def _update_display(self, ev):
         """Redraw the canvas"""
-        new_size = event.size()
+        new_size = ev.size()
         
         if new_size.width() > 0 and new_size.height() > 0:
             old_pixmap = self.pixmap()
@@ -51,43 +51,7 @@ class Canvas(QLabel):
                 painter.end()
             
             self.setPixmap(new_pixmap)
-
-class MainWindow(QMainWindow):
     
-    def __init__(self):
-        super().__init__()
-
-        self.setWindowTitle("Expand right")
-
-        self._setup_ui()
-
-    def _setup_ui(self):
-        central_widget = QWidget()
-        main_layout = QHBoxLayout()
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
-        central_widget.setLayout(main_layout)
-
-        self.canvas = Canvas()
-        main_layout.addWidget(self.canvas, stretch=1)
-
-        # Create right panel with fixed width and purple background
-        right_panel = QWidget()
-        right_panel.setFixedWidth(200)
-        right_panel.setStyleSheet("background-color: purple;")
-        main_layout.addWidget(right_panel)
-
-        self.setCentralWidget(central_widget)
-        self.resize(800, 400)
-
-
-def main(): 
-    app = QApplication(sys.argv)
-
-    window = MainWindow()
-    window.show()
-
-    app.exec()
-
-if __name__ == "__main__":
-    main()
+    def mousePressEvent(self, ev):
+        if ev.button() == Qt.MouseButton.LeftButton:
+            self.clicked.emit(ev.pos().x(), ev.pos().y())
