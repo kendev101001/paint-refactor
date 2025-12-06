@@ -14,18 +14,25 @@ class Canvas(QLabel):
     def __init__(self):
         super().__init__()
 
+        dpr = self.devicePixelRatio()
+
         # Make the canvas expand to fill available space
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.setMinimumSize(100, 100)
+        self.setMinimumSize(int(300 * dpr), int(200 * dpr))
 
         # Initialize with a pixmap
-        dpr = self.devicePixelRatio()
         pixmap = QPixmap(int(600 * dpr), int(300 * dpr))
         pixmap.setDevicePixelRatio(dpr)
         pixmap.fill(Qt.GlobalColor.white)
         self.setPixmap(pixmap)
 
     def resizeEvent(self, event):
+        """Called when window is resized (and on start up)"""
+        super().resizeEvent(event)
+        self._update_display(event)
+
+    def _update_display(self, event):
+        """Redraw the canvas"""
         new_size = event.size()
         
         if new_size.width() > 0 and new_size.height() > 0:
@@ -44,9 +51,6 @@ class Canvas(QLabel):
                 painter.end()
             
             self.setPixmap(new_pixmap)
-        
-        super().resizeEvent(event)
-
 
 class MainWindow(QMainWindow):
     
