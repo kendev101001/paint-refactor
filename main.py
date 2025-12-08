@@ -1,6 +1,6 @@
 import sys
-from views.canvas import Canvas
-from models.model import Model
+from views import Canvas
+from models import Model
 from controllers.controller import Controller
 from controls.colour_control import ColourControl
 from PyQt6.QtWidgets import (
