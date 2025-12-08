@@ -1,13 +1,15 @@
 import sys
+from views.canvas import Canvas
+from models.model import Model
+from controllers.controller import Controller
+from controls.colour_control import ColourControl
 from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
     QWidget,
     QHBoxLayout,
+    QVBoxLayout
 )
-from views.canvas import Canvas
-from models.model import Model
-from controllers.controller import Controller
 
 class MainWindow(QMainWindow):
     
@@ -15,13 +17,13 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Microsoft Paint Clone")
 
-        self.model = Model()
+        self._model = Model()
 
         # setup UI
         self._setup_ui()
 
         # create and connect controls to controller
-        self.controller = Controller(self.model, self.canvas)
+        self.controller = Controller(self._model, self._canvas)
         self._connect_controls()
 
     def _setup_ui(self):
@@ -30,18 +32,32 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         central_widget.setLayout(main_layout)
-
-        self.canvas = Canvas()
-        main_layout.addWidget(self.canvas, stretch=1)
-
-        # Create right panel with fixed width and purple background
-        right_panel = QWidget()
-        right_panel.setFixedWidth(200)
-        right_panel.setStyleSheet("background-color: purple;")
-        main_layout.addWidget(right_panel)
+        
+        # Main drawing canvas
+        self._canvas = Canvas()
+        main_layout.addWidget(self._canvas, stretch=1)
+        
+        # Control panel
+        control_panel = self._create_control_panel()
+        main_layout.addWidget(control_panel)
 
         self.setCentralWidget(central_widget)
         self.resize(800, 400)
+
+    def _create_control_panel(self):
+        control_panel = QWidget()
+        control_panel.setFixedWidth(200)
+        control_panel.setStyleSheet("background-color: purple;")
+
+        # control layout
+        control_layout = QVBoxLayout()
+        control_layout.setContentsMargins(0, 0, 0, 0)
+        control_layout.setSpacing(0)
+        control_panel.setLayout(control_layout)
+
+        self.colour_control = ColourControl(self._model.line_colour)
+
+        control_layout.addWidget(self.colour_control)
 
     def _connect_controls(self):
         # Add in control stuff later
