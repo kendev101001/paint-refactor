@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         self._setup_ui()
 
         # create and connect controls to controller
-        self.controller = Controller(self._model, self._canvas)
+        self._controller = Controller(self._model, self._canvas)
         self._connect_controls()
 
     def _setup_ui(self):
@@ -55,9 +55,12 @@ class MainWindow(QMainWindow):
         control_layout.setSpacing(0)
         control_panel.setLayout(control_layout)
 
-        self.colour_control = ColourControl(self._model.line_colour)
+        self._colour_control = ColourControl(self._model.line_colour)
+        control_layout.addWidget(self._colour_control)
+        
+        control_layout.addStretch()  # Optional: pushes controls to top
 
-        control_layout.addWidget(self.colour_control)
+        return control_panel  # THIS WAS MISSING
 
     def _connect_controls(self):
         # Add in control stuff later
