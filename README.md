@@ -71,7 +71,7 @@ This application follows the **Model-View-Controller (MVC)** design pattern:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/pyqt6-paint-app.git
+git clone https://github.com/kendev101001/paint-refactor.git
 cd pyqt6-paint-app
 
 ```
