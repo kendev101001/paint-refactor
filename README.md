@@ -1,6 +1,6 @@
 # PyQt6 Paint Application
 
-A modern, feature-rich paint application built with PyQt6, implementing the Model-View-Controller (MVC) architecture. This project extends and improves upon the basic PyQt6 paint tutorial by [Martin Fitzpatrick]([http://example.com](https://www.pythonguis.com/tutorials/pyqt6-bitmap-graphics/)), transforming a simple drawing canvas into a full-featured paint application.
+A modern, soon to be feature-rich paint application built with PyQt6, implementing the Model-View-Controller (MVC) architecture. This project extends and improves upon the basic PyQt6 paint tutorial by [Martin Fitzpatrick]([http://example.com](https://www.pythonguis.com/tutorials/pyqt6-bitmap-graphics/)), transforming a simple drawing canvas into a full-featured paint application.
 
 ## 📋 Table of Contents
 - [Features](#features)
@@ -34,6 +34,7 @@ A modern, feature-rich paint application built with PyQt6, implementing the Mode
 - **Menu Bar** - Easy access to canvas size options
 - **Real-time Feedback** - Brush size indicator
 
+<!--
 ## 📸 Screenshots
 
 *[Add screenshots of your application here]*
@@ -41,6 +42,8 @@ A modern, feature-rich paint application built with PyQt6, implementing the Mode
 ![Main Interface](screenshots/main-interface.png)
 ![Drawing Tools](screenshots/drawing-tools.png)
 ![Color Picker](screenshots/color-picker.png)
+
+!-->
 
 ## 🏗️ Architecture
 
@@ -92,3 +95,31 @@ Run the application:
 ```bash
 python main.py
 ```
+
+### Basic Controls
+- Select Tool: Click on any tool button (Freehand, Line, Rectangle, Circle)
+- Choose Colour: "Choose Colour" button opens a colour select dialogue
+- Adjust Brush Size: Use the slider to choose brush size, 1-20px
+- Change Canvas Size: Use menu bar "Canvas Size" options
+- Clear Canvas: Click "Clear" button to reset the canvas
+
+## Project Structure
+paint-refactor/
+├── main.py                 # Application entry point
+├── controllers/
+│   ├── __init__.py
+│   └── paint_controller.py # Main controller logic
+├── models/
+│   ├── __init__.py
+│   ├── canvas_model.py     # Canvas state and data
+│   └── tool_model.py       # Tool configurations
+├── views/
+│   ├── __init__.py
+│   ├── main_window.py      # Main application window
+│   ├── canvas_widget.py    # Drawing canvas implementation
+│   └── control_panel.py    # UI controls and toolbar
+├── utils/
+│   ├── __init__.py
+│   └── constants.py        # Application constants
+├── requirements.txt
+└── README.md
