@@ -1,11 +1,11 @@
 
+from PyQt6.QtGui import QPixmap, QPainter
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QLabel,
     QSizePolicy,
 )
 
-from PyQt6.QtGui import QPixmap, QPainter
-from PyQt6.QtCore import Qt, pyqtSignal
 class Canvas(QLabel):
 
     # Signal - for when you have clicked on the canvas
