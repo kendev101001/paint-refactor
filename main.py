@@ -1,8 +1,8 @@
 import sys
 from views import Canvas
 from models import Model
-from controllers.controller import Controller
-from controls.colour_control import ColourControl
+from controllers import Controller
+from controls import *
 from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
     def _create_control_panel(self):
         control_panel = QWidget()
         control_panel.setFixedWidth(200)
-        control_panel.setStyleSheet("background-color: purple;")
+        control_panel.setStyleSheet("background-color: grey;")
 
         # control layout
         control_layout = QVBoxLayout()
@@ -57,10 +57,24 @@ class MainWindow(QMainWindow):
 
         self._colour_control = ColourControl(self._model.line_colour)
         control_layout.addWidget(self._colour_control)
-        
-        control_layout.addStretch()  # Optional: pushes controls to top
 
-        return control_panel  # THIS WAS MISSING
+        self._brush_size_control = SliderControl(
+            "Brush Size",
+            self._model.min_brush_size, 
+            self._model.max_brush_size, 
+            self._model.init_brush_size
+        )
+        control_layout.addWidget(self._brush_size_control)
+
+        self._tool_control = ToolControl()
+        control_layout.addWidget(self._tool_control)
+
+        self._clear_canvas_control = ClearCanvasControl()
+        control_layout.addWidget(self._clear_canvas_control)
+        
+        control_layout.addStretch()
+
+        return control_panel 
 
     def _connect_controls(self):
         # Add in control stuff later

@@ -27,7 +27,7 @@ class ColourControl(QWidget):
 
         # Colour control button
         self._colour_button = QPushButton()
-        self._colour_button.setFixedSize(20, 20)
+        self._colour_button.setFixedSize(30, 20)
         self._update_button_colour()
         self._colour_button.clicked.connect(self._choose_color)
         layout.addWidget(self._colour_button)
