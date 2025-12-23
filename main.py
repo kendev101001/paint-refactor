@@ -1,5 +1,5 @@
 import sys
-from views import Canvas, ScrollableCanvas, ControlPanel, CanvasSizeDialog
+from views import ScrollableCanvas, ControlPanel, CanvasSizeDialog
 from models import Model
 from controllers import Controller
 from PyQt6.QtWidgets import (
