@@ -1,7 +1,12 @@
 
+
+from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QComboBox
 
 class ToolControl(QWidget):
+
+    tool_changed = pyqtSignal(str)
+    
     def __init__(self):
         super().__init__()
 
@@ -25,6 +30,7 @@ class ToolControl(QWidget):
 
         combobox = QComboBox()
         combobox.addItems(self._tool_options)
+        combobox.currentTextChanged.connect(self.tool_changed.emit)
         layout.addWidget(combobox)
 
         layout.addStretch()

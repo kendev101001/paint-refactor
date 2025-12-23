@@ -26,6 +26,20 @@ class MainWindow(QMainWindow):
         # Create and connect controls to controller
         self._controller = Controller(self._model, self._scrollable_canvas.canvas)
 
+        # Connect control panel to controller
+        self._control_panel.colour_control.colour_changed.connect(
+            self._controller.set_color
+        )
+        self._control_panel.brush_size_control.slider_changed.connect(
+            self._controller.set_brush_size
+        )
+        self._control_panel.clear_canvas_control.clear_canvas_requested.connect(
+            self._controller.clear_canvas
+        )
+        self._control_panel.tool_control.tool_changed.connect(
+            self._controller.set_tool
+        )
+
     def _setup_ui(self):
         central_widget = QWidget()
         main_layout = QHBoxLayout()
