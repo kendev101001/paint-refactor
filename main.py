@@ -9,7 +9,6 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
 )
 
-
 class MainWindow(QMainWindow):
 
     def __init__(self, canvas_width, canvas_height):
