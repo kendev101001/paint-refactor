@@ -5,14 +5,20 @@ from PyQt6.QtWidgets import (
     QScrollArea,
     QWidget,
     QVBoxLayout,
-    QSizePolicy,
 )
 
 
 class Canvas(QLabel):
-    """Fixed-size canvas widget for drawing."""
+    """
+    Fixed-size canvas widget for drawing.
+    
+    The Canvas is a "dumb" view - it:
+    - Emits signals for user input (doesn't handle logic)
+    - Provides drawing methods that accept explicit parameters
+    - Knows nothing about the Model
+    """
 
-    # Signal - for when you have clicked on the canvas
+    # Signals for user input (emitted, not handled here)
     clicked = pyqtSignal(int, int)
     mouse_moved = pyqtSignal(int, int)
     mouse_released = pyqtSignal()
@@ -29,10 +35,7 @@ class Canvas(QLabel):
         """Initialize the canvas with fixed dimensions."""
         dpr = self.devicePixelRatio()
         
-        # Set fixed size for the canvas (no expanding)
         self.setFixedSize(self._canvas_width, self._canvas_height)
-        
-        # Align to top-left
         self.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft)
         
         # Create pixmap with device pixel ratio for sharp rendering
@@ -44,8 +47,66 @@ class Canvas(QLabel):
         pixmap.fill(Qt.GlobalColor.white)
         self.setPixmap(pixmap)
         
-        # Add border to show canvas boundaries
         self.setStyleSheet("border: 1px solid #888;")
+
+    # ==================== Drawing Methods ====================
+    # These are called by the Controller with explicit parameters
+    
+    def draw_point(self, point, colour, size):
+        """
+        Draw a single point on the canvas.
+        
+        Args:
+            point: QPoint - location to draw
+            colour: QColor - colour of the point
+            size: int - diameter of the point
+        """
+        pixmap = self.pixmap()
+        if pixmap is None:
+            return
+        
+        painter = QPainter(pixmap)
+        self._configure_painter(painter, colour, size)
+        painter.drawPoint(point)
+        painter.end()
+        
+        self.setPixmap(pixmap)
+        self.update()
+
+    def draw_line(self, start_point, end_point, colour, size):
+        """
+        Draw a line between two points on the canvas.
+        
+        Args:
+            start_point: QPoint - start of line
+            end_point: QPoint - end of line
+            colour: QColor - colour of the line
+            size: int - width of the line
+        """
+        pixmap = self.pixmap()
+        if pixmap is None:
+            return
+        
+        painter = QPainter(pixmap)
+        self._configure_painter(painter, colour, size)
+        painter.drawLine(start_point, end_point)
+        painter.end()
+        
+        self.setPixmap(pixmap)
+        self.update()
+
+    def _configure_painter(self, painter, colour, size):
+        """Configure painter with common settings."""
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        
+        pen = QPen(colour)
+        pen.setWidth(size)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        pen.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
+        
+        painter.setPen(pen)
+
+    # ==================== Canvas Management ====================
 
     def get_canvas_size(self):
         """Return the canvas dimensions."""
@@ -59,7 +120,6 @@ class Canvas(QLabel):
         dpr = self.devicePixelRatio()
         old_pixmap = self.pixmap()
         
-        # Create new pixmap
         new_pixmap = QPixmap(
             int(width * dpr), 
             int(height * dpr)
@@ -83,6 +143,9 @@ class Canvas(QLabel):
             pixmap.fill(Qt.GlobalColor.white)
             self.setPixmap(pixmap)
             self.update()
+
+    # ==================== Mouse Event Handlers ====================
+    # These just emit signals - logic is in Controller
 
     def mousePressEvent(self, ev):
         if ev.button() == Qt.MouseButton.LeftButton:
@@ -119,14 +182,11 @@ class ScrollableCanvas(QScrollArea):
 
     def __init__(self, canvas_width=800, canvas_height=600):
         super().__init__()
-        
         self._setup_ui(canvas_width, canvas_height)
 
     def _setup_ui(self, canvas_width, canvas_height):
-        # Create the actual canvas
         self._canvas = Canvas(canvas_width, canvas_height)
         
-        # Container widget to center the canvas
         container = QWidget()
         container.setStyleSheet("background-color: #404040;")
         
@@ -136,7 +196,6 @@ class ScrollableCanvas(QScrollArea):
         layout.addWidget(self._canvas)
         container.setLayout(layout)
         
-        # Setup scroll area
         self.setWidget(container)
         self.setWidgetResizable(True)
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)

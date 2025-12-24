@@ -19,11 +19,15 @@ class MainWindow(QMainWindow):
         self._canvas_height = canvas_height
         self._model = Model()
 
-        # Setup UI
+        # Setup UI first
         self._setup_ui()
 
-        # Create and connect controls to controller
-        self._controller = Controller(self._model, self._scrollable_canvas.canvas)
+        # Create controller AFTER UI is set up, and pass the control panel
+        self._controller = Controller(
+            self._model, 
+            self._scrollable_canvas.canvas,
+            self._control_panel  # Pass control panel to controller
+        )
 
         # Connect control panel to controller
         self._control_panel.colour_control.colour_changed.connect(
@@ -64,10 +68,15 @@ class MainWindow(QMainWindow):
         window_height = min(self._canvas_height + 100, 900)
         self.resize(window_width, window_height)
 
-    @property
-    def canvas(self):
-        """Access the drawing canvas."""
-        return self._scrollable_canvas.canvas
+    # @property
+    # def canvas(self):
+    #     """Access the drawing canvas."""
+    #     return self._scrollable_canvas.canvas
+    
+    # @property
+    # def controller(self):
+    #     """Access the controller."""
+    #     return self._controller
 
 
 def main():

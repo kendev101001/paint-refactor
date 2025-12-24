@@ -1,12 +1,11 @@
 
-
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QLabel, QComboBox
 
 class ToolControl(QWidget):
 
     tool_changed = pyqtSignal(str)
-    
+
     def __init__(self):
         super().__init__()
 

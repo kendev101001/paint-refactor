@@ -1,42 +1,40 @@
 
-from PyQt6.QtCore import QObject
+from PyQt6.QtCore import QObject, pyqtSignal
 from PyQt6.QtGui import QColor
 
 
 class Model(QObject):
+    """
+    Stores application state for the paint application.
+    The model knows nothing about the view or controller.
+    """
+    
+    # Signals emitted when properties change
+    line_colour_changed = pyqtSignal(QColor)
+    brush_size_changed = pyqtSignal(int)
+    tool_changed = pyqtSignal(str)
+    
     def __init__(self):
         super().__init__()
 
         self._line_colour = QColor(0, 0, 0, 255)
         self._min_brush_size = 1
         self._max_brush_size = 20
-        self._init_brush_size = 5
-        self._current_brush_size = 5 # Do I really need this, can I just change init to just brush size and change that
-        self._current_tool = "freehand" # Again, this doesn't have init, and neither does line colour, so do I really need init and current?
-        # No setters and getters for these. Why? (Too many function calls - unnecessary??)
-        self._is_drawing = False # Why no Setter and Getter for this variable??
-        self._last_point = None # And with this as well?
+        self._brush_size = 5  # Current brush size (mutable)
+        self._current_tool = "freehand"
 
-    @property
-    def current_brush_size(self):
-        return self._current_brush_size
-    
-    @current_brush_size.setter
-    def current_brush_size(self, value):
-        self._current_brush_size = value
-
-    @property
-    def current_tool(self):
-        return self._current_tool
-    
-    @current_tool.setter
-    def current_tool(self, value):
-        self._current_tool = value
-
+    # --- Line Colour ---
     @property
     def line_colour(self):
         return self._line_colour
     
+    @line_colour.setter
+    def line_colour(self, colour):
+        if self._line_colour != colour:
+            self._line_colour = QColor(colour)  # Make a copy
+            self.line_colour_changed.emit(self._line_colour)
+    
+    # --- Brush Size Constraints ---
     @property
     def min_brush_size(self):
         return self._min_brush_size
@@ -45,6 +43,32 @@ class Model(QObject):
     def max_brush_size(self):
         return self._max_brush_size
     
+    # --- Current Brush Size ---
+    @property
+    def brush_size(self):
+        return self._brush_size
+    
+    @brush_size.setter
+    def brush_size(self, size):
+        # Clamp to valid range
+        clamped_size = max(self._min_brush_size, min(self._max_brush_size, size))
+        if self._brush_size != clamped_size:
+            self._brush_size = clamped_size
+            self.brush_size_changed.emit(self._brush_size)
+
+    # --- Current Tool ---
+    @property
+    def current_tool(self):
+        return self._current_tool
+    
+    @current_tool.setter
+    def current_tool(self, tool):
+        if self._current_tool != tool:
+            self._current_tool = tool
+            self.tool_changed.emit(self._current_tool)
+    
+    # --- For backwards compatibility ---
     @property
     def init_brush_size(self):
-        return self._init_brush_size
+        """Initial/default brush size."""
+        return 5
