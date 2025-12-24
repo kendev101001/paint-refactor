@@ -159,24 +159,6 @@ class Canvas(QLabel):
         if ev.button() == Qt.MouseButton.LeftButton:
             self.mouse_released.emit()
 
-    def draw_line(self, start_x, start_y, end_x, end_y, color, width):
-        """Draw a line on the canvas. This is a VIEW method - just draws what it's told."""
-        pixmap = self.pixmap()
-        if pixmap:
-            painter = QPainter(pixmap)
-            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-            
-            pen = QPen(color, width)
-            pen.setCapStyle(Qt.PenCapStyle.RoundCap)
-            painter.setPen(pen)
-            
-            painter.drawLine(QPoint(start_x, start_y), QPoint(end_x, end_y))
-            painter.end()
-            
-            self.setPixmap(pixmap)
-            self.update()
-
-
 class ScrollableCanvas(QScrollArea):
     """Scrollable container for the canvas, similar to Photoshop behavior."""
 
