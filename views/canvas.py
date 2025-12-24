@@ -159,6 +159,7 @@ class Canvas(QLabel):
         if ev.button() == Qt.MouseButton.LeftButton:
             self.mouse_released.emit()
 
+
 class ScrollableCanvas(QScrollArea):
     """Scrollable container for the canvas, similar to Photoshop behavior."""
 

@@ -115,7 +115,7 @@ class Controller(QObject):
     
     def _handle_tool_changed(self, tool_name):
         """Handle tool change from control panel (for future use)."""
-        # TODO: Implement different tools (brush, eraser, line, rectangle, etc.)
+        self.model.current_tool = tool_name
         print(f"Tool changed to: {tool_name}")  # Debug output
     
     # ==================== Public API for Programmatic Control ====================
