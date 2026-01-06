@@ -18,16 +18,19 @@ class MainWindow(QMainWindow):
 
         self._canvas_width = canvas_width
         self._canvas_height = canvas_height
+        
+        # Create model
         self._model = Model()
 
-        # Setup UI first
+        # Setup UI (creates views without model knowledge)
         self._setup_ui()
 
-        # Create controller AFTER UI is set up, and pass the control panel
+        # Create controller - this wires everything together
+        # Controller initializes views with model values and connects signals
         self._controller = Controller(
-            self._model, 
+            self._model,
             self._scrollable_canvas.canvas,
-            self._control_panel  # Pass control panel to controller
+            self._control_panel
         )
 
     def _setup_ui(self):
@@ -39,31 +42,21 @@ class MainWindow(QMainWindow):
 
         # Main drawing canvas (scrollable container)
         self._scrollable_canvas = ScrollableCanvas(
-            self._canvas_width, 
+            self._canvas_width,
             self._canvas_height
         )
         main_layout.addWidget(self._scrollable_canvas, stretch=1)
 
-        # Control panel
-        self._control_panel = ControlPanel(self._model)
+        # Control panel - no parameters, controller will initialize it
+        self._control_panel = ControlPanel()
         main_layout.addWidget(self._control_panel)
 
         self.setCentralWidget(central_widget)
-        
-        # Set window size based on canvas size (with some padding)
+
+        # Set window size based on canvas size
         window_width = min(self._canvas_width + 250, 1400)
         window_height = min(self._canvas_height + 100, 900)
         self.resize(window_width, window_height)
-
-    # @property
-    # def canvas(self):
-    #     """Access the drawing canvas."""
-    #     return self._scrollable_canvas.canvas
-    
-    # @property
-    # def controller(self):
-    #     """Access the controller."""
-    #     return self._controller
 
 
 def main():
@@ -71,12 +64,10 @@ def main():
 
     # Show canvas size dialog first
     width, height, accepted = CanvasSizeDialog.get_canvas_size()
-    
+
     if not accepted:
-        # User cancelled, exit the application
         sys.exit(0)
 
-    # Create main window with selected canvas size
     window = MainWindow(width, height)
     window.show()
 
