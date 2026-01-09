@@ -55,6 +55,12 @@ class Controller(QObject):
         self._control_panel.brush_size_changed.connect(self._handle_brush_size_changed)
         self._control_panel.tool_changed.connect(self._handle_tool_changed)
         self._control_panel.clear_requested.connect(self._handle_clear_canvas)
+    
+    def _connect_model_signals(self):
+        """Connect model signals to update views when model changes."""
+        self._model.line_colour_changed.connect(self._on_model_colour_changed)
+        self._model.brush_size_changed.connect(self._on_model_brush_size_changed)
+        self._model.tool_changed.connect(self._on_model_tool_changed)
 
     def _connect_model_signals(self):
         """Connect model input signals to handlers"""
@@ -115,3 +121,17 @@ class Controller(QObject):
     def _handle_clear_canvas(self):
         """User requested canvas clear - command canvas to clear."""
         self._canvas.clear()
+
+    # ==================== Model Change Handlers ====================
+    
+    def _on_model_colour_changed(self, colour):
+        """Model colour changed - update the view."""
+        self._control_panel.set_colour(colour)
+
+    def _on_model_brush_size_changed(self, size: int):
+        """Model brush size changed - update the view."""
+        self._control_panel.set_brush_size(size)
+
+    def _on_model_tool_changed(self, tool_name: str):
+        """Model tool changed - update the view."""
+        self._control_panel.set_tool(tool_name)

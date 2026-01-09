@@ -87,13 +87,19 @@ class ControlPanel(QWidget):
     # ==================== Update Methods (called by Controller if needed) ====================
 
     def set_colour(self, colour: QColor):
-        """Update the displayed colour."""
+        """Update the displayed colour (without emitting signals)."""
+        self._colour_control.blockSignals(True)
         self._colour_control.set_colour(colour)
+        self._colour_control.blockSignals(False)
 
     def set_brush_size(self, size: int):
-        """Update the displayed brush size."""
+        """Update the displayed brush size (without emitting signals)."""
+        self._brush_size_control.blockSignals(True)
         self._brush_size_control.set_value(size)
+        self._brush_size_control.blockSignals(False)
 
     def set_tool(self, tool_name: str):
-        """Update the selected tool."""
+        """Update the selected tool (without emitting signals)."""
+        self._tool_control.blockSignals(True)
         self._tool_control.set_tool(tool_name)
+        self._tool_control.blockSignals(False)
