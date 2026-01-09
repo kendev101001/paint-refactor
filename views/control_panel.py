@@ -20,6 +20,7 @@ class ControlPanel(QWidget):
     """
     
     # Signals emitted when user interacts with controls
+    # These are what is used for bubbling up as these same signals are emitted from the controls too
     colour_changed = pyqtSignal(QColor)
     brush_size_changed = pyqtSignal(int)
     tool_changed = pyqtSignal(str)
