@@ -28,6 +28,7 @@ class Controller(QObject):
         # Connect all signals
         self._connect_canvas_signals()
         self._connect_control_panel_signals()
+        self._connect_model_signals()
 
     def _initialize_views(self):
         """Initialize all views with current model values."""
@@ -54,6 +55,12 @@ class Controller(QObject):
         self._control_panel.brush_size_changed.connect(self._handle_brush_size_changed)
         self._control_panel.tool_changed.connect(self._handle_tool_changed)
         self._control_panel.clear_requested.connect(self._handle_clear_canvas)
+
+    def _connect_model_signals(self):
+        """Connect model input signals to handlers"""
+        self._model.line_colour_changed.connect(self._control_panel.set_colour)
+        self._model.brush_size_changed.connect(self._control_panel.set_brush_size)
+        self._model.tool_changed.connect(self._control_panel.set_tool)
 
     # ==================== Canvas Event Handlers ====================
 
