@@ -32,7 +32,7 @@ class Model(QObject):
     def line_colour(self, colour):
         if self._line_colour != colour:
             self._line_colour = QColor(colour)  # Make a copy
-            # self.line_colour_changed.emit(self._line_colour)
+            self.line_colour_changed.emit(self._line_colour)
     
     # --- Brush Size Constraints ---
     @property
@@ -54,7 +54,7 @@ class Model(QObject):
         clamped_size = max(self._min_brush_size, min(self._max_brush_size, size))
         if self._brush_size != clamped_size:
             self._brush_size = clamped_size
-            # self.brush_size_changed.emit(self._brush_size)
+            self.brush_size_changed.emit(self._brush_size)
 
     # --- Current Tool ---
     @property
@@ -65,7 +65,7 @@ class Model(QObject):
     def current_tool(self, tool):
         if self._current_tool != tool:
             self._current_tool = tool
-            # self.tool_changed.emit(self._current_tool)
+            self.tool_changed.emit(self._current_tool)
     
     # --- For backwards compatibility ---
     @property
